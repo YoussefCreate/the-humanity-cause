@@ -1,0 +1,20 @@
+:root { --bg:#0b0f14; --card:#121923; --text:#eaf2ff; --muted:#9bb0c6; --accent:#7bdcff; }
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,Roboto}
+.wrap{max-width:980px;margin:0 auto;padding:28px}
+header{text-align:center;margin-bottom:22px}
+h1{margin:.2rem 0 0;font-size:2rem} h2{margin:.2rem 0 0;font-weight:600;color:var(--accent)}
+.sub{color:var(--muted);margin:.5rem 0 1rem}
+#countdown{margin:10px auto 0;padding:8px 12px;border:1px solid #223244;border-radius:10px;display:inline-block;color:var(--accent);font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid #1f2a36;border-radius:14px;padding:16px}
+code{display:block;background:#0b121a;border:1px solid #1d2a36;border-radius:8px;padding:8px;overflow:auto}
+.btns{display:flex;gap:8px;margin:10px 0}
+button, a{background:#162333;color:var(--text);border:1px solid #223244;border-radius:8px;padding:8px 10px;text-decoration:none}
+button:hover, a:hover{border-color:var(--accent)}
+.qr{margin-top:10px;width:160px;height:160px;border-radius:12px;border:1px solid #243244;background:#0b121a;display:block}
+.qr--disabled{opacity:.4;filter:grayscale(1)}
+.metric{margin-top:12px;font-size:0.95rem}
+.muted{color:var(--muted)}
+.about{margin:26px 0 10px;text-align:center;color:#cfe4ff}
+.fineprint{color:var(--muted);font-size:.9rem}
+footer{text-align:center;margin-top:10px;color:var(--muted)}
