@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Humanity Cause — Challenge Your Generosity</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>🌍 The Humanity Cause</h1>
+      <h2>Challenge Your Generosity</h2>
+      <p class="sub">No fame. No faces. No expectations — just giving.</p>
+      <div id="countdown" aria-live="polite"></div>
+    </header>
+
+    <section class="cards">
+      <article class="card">
+        <h3>Donate BTC</h3>
+        <code id="btcAddr">bc1q605vmx3u25dm6wnhe8vs4w0qs0vqknvwpd5mgn</code>
+        <div class="btns">
+          <button id="copyBtc">Copy</button>
+          <a id="openBtc" target="_blank">Open in wallet</a>
+        </div>
+        <img class="qr" alt="BTC QR" id="btcQR"/>
+        <div class="metric"><span>Live BTC received:</span> <strong id="btcTotal">…</strong></div>
+      </article>
+
+      <article class="card">
+        <h3>Donate USDT</h3>
+        <p class="muted">Waiting for USDT address… (TRC20 or ERC20)</p>
+        <code id="usdtAddr">—</code>
+        <img class="qr qr--disabled" alt="USDT QR (pending)"/>
+        <div class="metric"><span>Live USDT received:</span> <strong id="usdtTotal">—</strong></div>
+      </article>
+    </section>
+
+    <section class="about">
+      <p>“This is not a product. Not a brand. Not a charity. This is a test of humanity.”</p>
+      <p class="fineprint">100% anonymous. Public on-chain totals. No emails. No tracking.</p>
+    </section>
+
+    <footer>
+      <p>#TheHumanityCause • Share & invite one friend</p>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
