@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Humanity Cause — Challenge Your Generosity</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    :root { --bg:#0b0f14; --card:#121923; --text:#eaf2ff; --muted:#9bb0c6; --accent:#7bdcff; }
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,Segoe UI,Roboto}
+    .wrap{max-width:980px;margin:0 auto;padding:28px}
+    header{text-align:center;margin-bottom:22px}
+    h1{margin:.2rem 0 0;font-size:2rem} h2{margin:.2rem 0 0;font-weight:600;color:var(--accent)}
+    .sub{color:var(--muted);margin:.5rem 0 1rem}
+    #countdown{margin:10px auto 0;padding:8px 12px;border:1px solid #223244;border-radius:10px;display:inline-block;color:var(--accent);font-weight:700}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid #1f2a36;border-radius:14px;padding:16px}
+    code{display:block;background:#0b121a;border:1px solid #1d2a36;border-radius:8px;padding:8px;overflow:auto;cursor:pointer}
+    .btns{display:flex;gap:8px;margin:10px 0}
+    button, a{background:#162333;color:var(--text);border:1px solid #223244;border-radius:8px;padding:8px 10px;text-decoration:none}
+    button:hover, a:hover{border-color:var(--accent)}
+    .qr{margin-top:10px;width:160px;height:160px;border-radius:12px;border:1px solid #243244;background:#0b121a;display:block}
+    .qr--disabled{opacity:.4;filter:grayscale(1)}
+    .metric{margin-top:12px;font-size:0.95rem}
+    .muted{color:var(--muted)}
+    .about{margin:26px 0 10px;text-align:center;color:#cfe4ff}
+    .fineprint{color:var(--muted);font-size:.9rem}
+    footer{text-align:center;margin-top:10px;color:var(--muted)}
+    .suggested{font-size:0.9rem;color:var(--muted);margin-top:8px}
+    .badge{display:inline-block;padding:4px 8px;background:#1a2a3f;border-radius:5px;color:var(--accent);font-size:0.8rem;margin-top:8px}
+  </style>
 </head>
 <body>
   <main class="wrap">
@@ -18,13 +42,14 @@
     <section class="cards">
       <article class="card">
         <h3>Donate BTC</h3>
-        <code id="btcAddr">bc1q605vmx3u25dm6wnhe8vs4w0qs0vqknvwpd5mgn</code>
+        <code id="btcAddr" onclick="copyToClipboard('btc')">bc1q605vmx3u25dm6wnhe8vs4w0qs0vqknvwpd5mgn</code>
         <div class="btns">
-          <button id="copyBtc">Copy</button>
-          <a id="openBtc" target="_blank">Open in wallet</a>
+          <a id="openBtc" target="_blank">Open in Wallet</a>
+          <a href="bitcoin:bc1q605vmx3u25dm6wnhe8vs4w0qs0vqknvwpd5mgn?amount=0.001&label=TheHumanityCause">Quick $1 Link</a>
         </div>
-        <img class="qr" alt="BTC QR" id="btcQR"/>
-        <div class="metric"><span>Live BTC received:</span> <strong id="btcTotal">…</strong></div>
+        <img class="qr" id="btcQR" alt="BTC QR" />
+        <div class="suggested">Suggested: $1 / $5 / $10 in BTC</div>
+        <div class="metric"><span>Live BTC received:</span> <strong id="btcTotal">…</strong> <span class="badge">Takes &lt;30s</span></div>
       </article>
 
       <article class="card">
@@ -33,6 +58,7 @@
         <code id="usdtAddr">—</code>
         <img class="qr qr--disabled" alt="USDT QR (pending)"/>
         <div class="metric"><span>Live USDT received:</span> <strong id="usdtTotal">—</strong></div>
+        <div class="suggested">Use with Trust Wallet, TronLink, or MetaMask</div>
       </article>
     </section>
 
@@ -45,6 +71,44 @@
       <p>#TheHumanityCause • Share & invite one friend</p>
     </footer>
   </main>
-  <script src="script.js"></script>
+  <script>
+    const BTC_ADDRESS = "bc1q605vmx3u25dm6wnhe8vs4w0qs0vqknvwpd5mgn";
+    document.getElementById("btcQR").src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:${BTC_ADDRESS}`;
+    document.getElementById("openBtc").href = `bitcoin:${BTC_ADDRESS}`;
+
+    function copyToClipboard(type) {
+      const text = type === 'btc' ? BTC_ADDRESS : document.getElementById('usdtAddr').textContent;
+      navigator.clipboard.writeText(text);
+      alert(`${type.toUpperCase()} address copied to clipboard!`);
+    }
+
+    function fetchBTC() {
+      fetch(`https://api.blockchair.com/bitcoin/dashboards/address/${BTC_ADDRESS}`)
+        .then(res => res.json())
+        .then(data => {
+          const sats = data.data[BTC_ADDRESS].address.balance;
+          const btc = (sats / 1e8).toFixed(8);
+          document.getElementById("btcTotal").textContent = `${btc} BTC`;
+        })
+        .catch(() => document.getElementById("btcTotal").textContent = "—");
+    }
+    fetchBTC();
+    setInterval(fetchBTC, 60000);
+
+    const start = new Date();
+    const end = new Date(start.getTime() + 86400000);
+    const countdownEl = document.getElementById("countdown");
+    const fmt = (n)=> String(n).padStart(2,"0");
+    function tick() {
+      const now = new Date();
+      let diff = Math.max(0, end - now);
+      const h = Math.floor(diff / 3600000); diff -= h*3600000;
+      const m = Math.floor(diff / 60000);   diff -= m*60000;
+      const s = Math.floor(diff / 1000);
+      countdownEl.textContent = `⏳ ${fmt(h)}:${fmt(m)}:${fmt(s)} remaining`;
+      if (diff <= 0) clearInterval(timer);
+    }
+    const timer = setInterval(tick, 1000); tick();
+  </script>
 </body>
 </html>
